@@ -5,7 +5,9 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,7 +22,9 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.sidapps.carparking.auth.AuthFailedResponse;
+import com.sidapps.carparking.auth.AuthService;
 import com.sidapps.carparking.shared.ErrorMessageResponse;
+import com.sidapps.carparking.users.User;
 
 import jakarta.validation.Valid;
 
@@ -28,7 +32,16 @@ import jakarta.validation.Valid;
 @RequestMapping(path = "/booking")
 public class SlotBookingController {
 	@Autowired
+	private AuthService authService;
+
+	@Autowired
 	private BookingService bookingService;
+
+	@Autowired
+	private ParkingSlotRepository parkingSlotRepository;
+
+	@Autowired
+	private SlotBookingRepository slotBookingRepository;
 
 	@PostMapping(path = "/checkAvailability")
 	public ResponseEntity<?> checkSlotAvailability(@Valid @RequestBody SlotBookingRequest request) {
@@ -51,6 +64,85 @@ public class SlotBookingController {
 			ErrorMessageResponse response = new ErrorMessageResponse("Invalid booking date");
 			return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
 		}
+	}
+
+	@PostMapping(path = "/bookSlot")
+	public ResponseEntity<?> bookSlot(@Valid @RequestBody SlotBookingRequest request) {
+		User user = authService.getAuthenticatedUser();
+		if (user != null) {
+			System.out.println(user.getName());
+			try {
+				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM-dd-yyyy");
+				LocalDate bookingDate = LocalDate.parse(request.getDate(), formatter);
+
+				if (bookingDate.isBefore(LocalDate.now())) {
+					ErrorMessageResponse response = new ErrorMessageResponse("Booking date cannot be in the past");
+					return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+				}
+
+				LocalDateTime startOfDay = bookingDate.atStartOfDay();
+				LocalDateTime endOfDay = bookingDate.atTime(23, 59, 59);
+				List<SlotBooking> existingBookings = slotBookingRepository.findByUserAndBookingDateBetween(user,
+						startOfDay, endOfDay);
+
+				if (!existingBookings.isEmpty()) {
+					ErrorMessageResponse response = new ErrorMessageResponse(
+							"You already have a booking on this date.");
+					return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+				}
+
+				LocalDateTime bookingDateTime = bookingDate.atStartOfDay();
+
+				boolean isAvailable = bookingService.checkSlotAvailability(request.getVehicleType(), bookingDateTime);
+				if (isAvailable) {
+					Optional<ParkingSlot> allocatedSlotOptional = allocateParkingSlot(request.getVehicleType(),
+							bookingDateTime);
+
+					if (allocatedSlotOptional.isPresent()) {
+						ParkingSlot allocatedSlot = allocatedSlotOptional.get();
+
+						SlotBooking newBooking = new SlotBooking();
+						newBooking.setBookedAt(LocalDateTime.now());
+						newBooking.setBookingDate(bookingDateTime);
+						newBooking.setUser(user);
+						newBooking.setSlot(allocatedSlot);
+
+						bookingService.saveBooking(newBooking);
+
+						BookingSuccessResponse response = new BookingSuccessResponse(newBooking);
+						BookedSlotDAO bookedSlot = new BookedSlotDAO(allocatedSlot.getName(),
+								allocatedSlot.getLocation());
+						response.setBookedSlot(bookedSlot);
+						return new ResponseEntity<>(response, HttpStatus.CREATED);
+					} else {
+						ErrorMessageResponse response = new ErrorMessageResponse("No slots available");
+						return new ResponseEntity<>(response, HttpStatus.OK);
+					}
+				} else {
+					ErrorMessageResponse response = new ErrorMessageResponse("No slots available");
+					return new ResponseEntity<>(response, HttpStatus.OK);
+				}
+			} catch (DateTimeParseException e) {
+				ErrorMessageResponse response = new ErrorMessageResponse("Invalid booking date");
+				return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+			}
+		} else {
+			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+		}
+
+	}
+
+	private Optional<ParkingSlot> allocateParkingSlot(VehicleType vehicleType, LocalDateTime bookingDateTime) {
+		List<ParkingSlot> availableSlots = parkingSlotRepository.findByVehicleType(vehicleType);
+
+		for (ParkingSlot slot : availableSlots) {
+			boolean isBooked = bookingService.isSlotBookedOnDate(slot.getId(), bookingDateTime);
+
+			if (!isBooked) {
+				return Optional.of(slot);
+			}
+		}
+		return Optional.empty();
 	}
 
 	@ExceptionHandler(MethodArgumentNotValidException.class)

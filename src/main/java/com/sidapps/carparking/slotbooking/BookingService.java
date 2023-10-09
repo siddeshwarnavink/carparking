@@ -15,6 +15,15 @@ public class BookingService {
 	@Autowired
 	private SlotBookingRepository slotBookingRepository;
 
+	public SlotBooking saveBooking(SlotBooking slotBooking) {
+		return slotBookingRepository.save(slotBooking);
+	}
+
+	public boolean isSlotBookedOnDate(Integer slotId, LocalDateTime bookingDate) {
+		List<SlotBooking> bookings = slotBookingRepository.findBySlotIdAndBookingDate(slotId, bookingDate);
+		return !bookings.isEmpty();
+	}
+	
 	public boolean checkSlotAvailability(VehicleType vehicleType, LocalDateTime bookingDate) {
 		List<ParkingSlot> availableSlots = parkingSlotRepository.findByVehicleType(vehicleType);
 		for (ParkingSlot slot : availableSlots) {

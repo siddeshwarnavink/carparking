@@ -7,6 +7,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 
 @Entity
 public class ParkingSlot {
@@ -21,8 +22,16 @@ public class ParkingSlot {
 	private String location;
 	
 	@Enumerated(EnumType.STRING)
-	@NotEmpty(message = "Vehicle type is required")
+	@NotNull(message = "Vehicle type is required")
 	private VehicleType vehicleType;
+	
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
 
 	public String getName() {
 		return name;

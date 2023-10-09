@@ -12,15 +12,16 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 
 @Entity
 public class SlotBooking {
 	@Id
-	@GeneratedValue(generator = "uuid")
-	@GenericGenerator(name = "uuid", strategy = "org.hibernate.id.UUIDGenerator")
-	@Column(length = 6, unique = true)
+	@GeneratedValue(generator = "shortUUID")
+	@GenericGenerator(name = "shortUUID", strategy = "com.sidapps.carparking.shared.ShortUUIDGenerator")
+	@Column(unique = true)
 	private String bookingId;
+
 
 	@ManyToOne
 	@JoinColumn(name = "user_id")
@@ -28,15 +29,14 @@ public class SlotBooking {
 
 	@Column(name = "booked_at")
 	private LocalDateTime bookedAt;
-	
 
 	@Column(name = "booked_date")
-	@NotEmpty(message = "Booking date required")
+	@NotNull(message = "Booking date required")
 	private LocalDateTime bookingDate;
 
 	@ManyToOne
 	@JoinColumn(name = "slot_id")
-	@NotEmpty(message = "Slot is required")
+	@NotNull(message = "Slot is required")
 	private ParkingSlot slot;
 
 	@Column(name = "checkin_at")
@@ -52,4 +52,76 @@ public class SlotBooking {
 	@ManyToOne
 	@JoinColumn(name = "checkout_staff_id")
 	private User checkoutStaff;
+
+	public String getBookingId() {
+		return bookingId;
+	}
+
+	public void setBookingId(String bookingId) {
+		this.bookingId = bookingId;
+	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
+	public LocalDateTime getBookedAt() {
+		return bookedAt;
+	}
+
+	public void setBookedAt(LocalDateTime bookedAt) {
+		this.bookedAt = bookedAt;
+	}
+
+	public LocalDateTime getBookingDate() {
+		return bookingDate;
+	}
+
+	public void setBookingDate(LocalDateTime bookingDate) {
+		this.bookingDate = bookingDate;
+	}
+
+	public ParkingSlot getSlot() {
+		return slot;
+	}
+
+	public void setSlot(ParkingSlot slot) {
+		this.slot = slot;
+	}
+
+	public LocalDateTime getCheckinAt() {
+		return checkinAt;
+	}
+
+	public void setCheckinAt(LocalDateTime checkinAt) {
+		this.checkinAt = checkinAt;
+	}
+
+	public User getCheckinStaff() {
+		return checkinStaff;
+	}
+
+	public void setCheckinStaff(User checkinStaff) {
+		this.checkinStaff = checkinStaff;
+	}
+
+	public LocalDateTime getCheckoutAt() {
+		return checkoutAt;
+	}
+
+	public void setCheckoutAt(LocalDateTime checkoutAt) {
+		this.checkoutAt = checkoutAt;
+	}
+
+	public User getCheckoutStaff() {
+		return checkoutStaff;
+	}
+
+	public void setCheckoutStaff(User checkoutStaff) {
+		this.checkoutStaff = checkoutStaff;
+	}
 }
