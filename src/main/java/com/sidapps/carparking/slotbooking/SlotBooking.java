@@ -28,6 +28,11 @@ public class SlotBooking {
 
 	@Column(name = "booked_at")
 	private LocalDateTime bookedAt;
+	
+
+	@Column(name = "booked_date")
+	@NotEmpty(message = "Booking date required")
+	private LocalDateTime bookingDate;
 
 	@ManyToOne
 	@JoinColumn(name = "slot_id")
