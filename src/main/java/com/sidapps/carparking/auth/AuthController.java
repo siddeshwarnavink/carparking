@@ -97,6 +97,22 @@ public class AuthController {
 		}
 	}
 
+	@PostMapping(path = "/verify")
+	public ResponseEntity<?> verify() {
+
+		User user = authService.getAuthenticatedUser();
+		if (user != null) {
+			AuthSuccessResponse response = new AuthSuccessResponse();
+			response.setMessage("Valid session");
+			response.setUser(user);
+
+			return new ResponseEntity<>(response, HttpStatus.OK);
+		} else {
+			ErrorMessageResponse response = new ErrorMessageResponse("Invalid user session.");
+			return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
+		}
+	}
+
 	@PostMapping(path = "/logout")
 	public ResponseEntity<?> logout() {
 		User user = authService.getAuthenticatedUser();
@@ -107,7 +123,7 @@ public class AuthController {
 			return new ResponseEntity<>(response, HttpStatus.OK);
 		} else {
 			ErrorMessageResponse response = new ErrorMessageResponse("Invalid user session.");
-			return new ResponseEntity<>(response,HttpStatus.UNAUTHORIZED);
+			return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
 		}
 	}
 

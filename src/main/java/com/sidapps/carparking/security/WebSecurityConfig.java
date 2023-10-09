@@ -28,6 +28,7 @@ public class WebSecurityConfig {
 				.authorizeHttpRequests(
 					authorize -> authorize
 						.requestMatchers("/auth/logout").authenticated()
+						.requestMatchers("/auth/verufy").authenticated()
 						.requestMatchers("/auth/**").permitAll()
 						.anyRequest().authenticated()
 				)

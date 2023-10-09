@@ -15,6 +15,10 @@ public class AuthSuccessResponse extends SuccessMessageResponse {
 		super(message);
 	}
 
+	public User getUser() {
+		return user;
+	}
+	
 	public String getToken() {
 		return token;
 	}

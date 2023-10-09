@@ -32,7 +32,7 @@ public class AuthenticationTokenFilter extends OncePerRequestFilter {
 		String requestURI = request.getRequestURI();
 		ErrorMessageResponse errorResponse = new ErrorMessageResponse("User session invalid.");
 
-		if (requestURI.startsWith("/auth/") && !"/auth/logout".equals(requestURI)) {
+		if (requestURI.startsWith("/auth/") && !"/auth/logout".equals(requestURI) && !"/auth/verify".equals(requestURI)) {
 			filterChain.doFilter(request, response);
 			return;
 		}
