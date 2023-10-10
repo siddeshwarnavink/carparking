@@ -2,6 +2,6 @@ const joinClasses = (...classNames: Array<string | boolean | undefined | null>):
     return classNames
         .filter(Boolean)
         .join(' ')
-};
+}
 
 export default joinClasses

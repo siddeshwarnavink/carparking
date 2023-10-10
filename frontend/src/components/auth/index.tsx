@@ -1,19 +1,46 @@
 import React from 'react'
 import { Formik } from 'formik'
 import * as yup from 'yup'
+import swal from 'sweetalert'
+import { AxiosError } from 'axios'
+import { useDispatch } from 'react-redux'
 
+import * as authServices from '../../services/auth'
+import { setAuthUser } from '../../store/authSlice'
 import PageCard from '../ui/pageCard'
 import TextInput from '../ui/textInput'
 import Button from '../ui/button'
 
 const Auth: React.FC = () => {
+    const dispatch = useDispatch()
+
     const schema = yup.object().shape({
         email: yup.string().required('Email is a required'),
-        password: yup.string().required('Email is a required'),
+        password: yup.string().required('Password is a required'),
     })
 
-    const onAuthenticationHandler = ({ email, password }: { email: string, password: string }) => {
-        console.log({ email, password });
+    const onAuthenticationHandler = async ({ email, password }: { email: string, password: string }) => {
+        try {
+            const response = await authServices.loginUser(email, password)
+            dispatch(setAuthUser({ user: response.data.user }))
+            swal({
+                title: response.data.message,
+                icon: 'success',
+            })
+        } catch (error) {
+            const axiosError = error as AxiosError<{ errorMessage: string }>
+            if (axiosError.response) {
+                swal({
+                    title: axiosError.response.data.errorMessage,
+                    icon: 'error',
+                })
+            } else {
+                swal({
+                    title: axiosError.message,
+                    icon: 'error',
+                })
+            }
+        }
     }
 
 
@@ -40,7 +67,6 @@ const Auth: React.FC = () => {
                                 onChange={handleChange}
                                 isInvalid={(touched.email && errors.email) ? true : false}
                             />
-
                             <TextInput
                                 name='password'
                                 placeholder='Password'
@@ -50,7 +76,6 @@ const Auth: React.FC = () => {
                                 onChange={handleChange}
                                 isInvalid={(touched.password && errors.password) ? true : false}
                             />
-
                             <div style={{ textAlign: 'center' }}>
                                 <Button type='submit'>Login now</Button>
                             </div>
