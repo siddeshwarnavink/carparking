@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.sidapps.carparking.auth.AuthFailedResponse;
 import com.sidapps.carparking.auth.AuthService;
+import com.sidapps.carparking.auth.UserRole;
 import com.sidapps.carparking.shared.ErrorMessageResponse;
 import com.sidapps.carparking.users.User;
 
@@ -70,7 +71,10 @@ public class SlotBookingController {
 	public ResponseEntity<?> bookSlot(@Valid @RequestBody SlotBookingRequest request) {
 		User user = authService.getAuthenticatedUser();
 		if (user != null) {
-			System.out.println(user.getName());
+			if(user.getRole() != UserRole.Customer) {
+				return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+			}
+			
 			try {
 				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM-dd-yyyy");
 				LocalDate bookingDate = LocalDate.parse(request.getDate(), formatter);
