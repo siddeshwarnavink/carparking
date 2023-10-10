@@ -15,11 +15,10 @@ import com.sidapps.carparking.auth.AuthService;
 import com.sidapps.carparking.auth.UserRole;
 import com.sidapps.carparking.shared.ErrorMessageResponse;
 import com.sidapps.carparking.shared.SuccessMessageResponse;
-import com.sidapps.carparking.slotbooking.BookingService;
-import com.sidapps.carparking.slotbooking.ParkingSlotRepository;
+import com.sidapps.carparking.slotbooking.BookedSlotDTO;
+import com.sidapps.carparking.slotbooking.BookingDTO;
 import com.sidapps.carparking.slotbooking.SlotBooking;
 import com.sidapps.carparking.slotbooking.SlotBookingRepository;
-import com.sidapps.carparking.slotbooking.SlotBookingRequest;
 import com.sidapps.carparking.users.User;
 
 import jakarta.validation.Valid;
@@ -29,12 +28,6 @@ import jakarta.validation.Valid;
 public class BookingCheckinController {
 	@Autowired
 	private AuthService authService;
-
-	@Autowired
-	private BookingService bookingService;
-
-	@Autowired
-	private ParkingSlotRepository parkingSlotRepository;
 
 	@Autowired
 	private SlotBookingRepository slotBookingRepository;
@@ -56,7 +49,10 @@ public class BookingCheckinController {
 				currentBooking.setCheckinStaff(user);
 				slotBookingRepository.save(currentBooking);
 
-				SuccessMessageResponse response = new SuccessMessageResponse("Booking checked in");
+				BookingCheckinResponse response = new BookingCheckinResponse("Booking checked in");
+				BookedSlotDTO bookedSlotDTO = new BookedSlotDTO(currentBooking.getSlot().getLocation(), currentBooking.getSlot().getName());
+				BookingDTO bookingDTO = new BookingDTO(currentBooking.getBookingId(), bookedSlotDTO);
+				response.setBooking(bookingDTO);
 				return new ResponseEntity<>(response, HttpStatus.OK);
 			} else {
 				ErrorMessageResponse response = new ErrorMessageResponse("Booking not found");

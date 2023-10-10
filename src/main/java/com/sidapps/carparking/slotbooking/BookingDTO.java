@@ -2,9 +2,9 @@ package com.sidapps.carparking.slotbooking;
 
 public class BookingDTO {
 	private String bookingCode;
-	private BookedSlotDAO bookedSlot;
+	private BookedSlotDTO bookedSlot;
 	
-	public BookingDTO(String bookingCode, BookedSlotDAO bookedSlot) {
+	public BookingDTO(String bookingCode, BookedSlotDTO bookedSlot) {
 		this.setBookedSlot(bookedSlot);
 		this.setBookingCode(bookingCode);
 	}
@@ -17,11 +17,11 @@ public class BookingDTO {
 		this.bookingCode = bookingCode;
 	}
 
-	public BookedSlotDAO getBookedSlot() {
+	public BookedSlotDTO getBookedSlot() {
 		return bookedSlot;
 	}
 
-	public void setBookedSlot(BookedSlotDAO bookedSlot) {
+	public void setBookedSlot(BookedSlotDTO bookedSlot) {
 		this.bookedSlot = bookedSlot;
 	}
 }

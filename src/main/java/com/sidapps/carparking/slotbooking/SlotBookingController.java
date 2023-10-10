@@ -113,7 +113,7 @@ public class SlotBookingController {
 
 						bookingService.saveBooking(newBooking);
 
-						BookedSlotDAO bookedSlot = new BookedSlotDAO(allocatedSlot.getName(),
+						BookedSlotDTO bookedSlot = new BookedSlotDTO(allocatedSlot.getName(),
 								allocatedSlot.getLocation());
 						BookingDTO bookingDTO = new BookingDTO(newBooking.getBookingId(), bookedSlot);
 						BookingSuccessResponse response = new BookingSuccessResponse(bookingDTO);

@@ -1,14 +1,14 @@
 package com.sidapps.carparking.slotbooking;
 
-public class BookedSlotDAO {
+public class BookedSlotDTO {
 	private String location;
 	private String spot;
 
-	public BookedSlotDAO() {
+	public BookedSlotDTO() {
 
 	}
 
-	public BookedSlotDAO(String location, String spot) {
+	public BookedSlotDTO(String location, String spot) {
 		this.setLocation(location);
 		this.setSpot(spot);
 	}
