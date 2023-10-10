@@ -3,27 +3,17 @@ package com.sidapps.carparking.slotbooking;
 import com.sidapps.carparking.shared.SuccessMessageResponse;
 
 public class BookingSuccessResponse extends SuccessMessageResponse {
-	private String bookingCode;
-	private BookedSlotDAO bookedSlot;
+	private BookingDTO booking;
 
-	public BookingSuccessResponse(SlotBooking booking) {
-		this.setBookingCode(booking.getBookingId());
-		this.setMessage("Slot booking success");
+	public BookingSuccessResponse(BookingDTO booking) {
+		this.setBooking(booking);
 	}
 
-	public String getBookingCode() {
-		return bookingCode;
+	public BookingDTO getBooking() {
+		return booking;
 	}
 
-	public void setBookingCode(String bookingCode) {
-		this.bookingCode = bookingCode;
-	}
-
-	public BookedSlotDAO getBookedSlot() {
-		return bookedSlot;
-	}
-
-	public void setBookedSlot(BookedSlotDAO bookedSlot) {
-		this.bookedSlot = bookedSlot;
+	public void setBooking(BookingDTO booking) {
+		this.booking = booking;
 	}
 }

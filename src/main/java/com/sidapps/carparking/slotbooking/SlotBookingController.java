@@ -109,10 +109,11 @@ public class SlotBookingController {
 
 						bookingService.saveBooking(newBooking);
 
-						BookingSuccessResponse response = new BookingSuccessResponse(newBooking);
 						BookedSlotDAO bookedSlot = new BookedSlotDAO(allocatedSlot.getName(),
 								allocatedSlot.getLocation());
-						response.setBookedSlot(bookedSlot);
+						BookingDTO bookingDTO = new BookingDTO(newBooking.getBookingId(), bookedSlot);
+						BookingSuccessResponse response = new BookingSuccessResponse(bookingDTO);
+						response.setMessage("Slot booking success");
 						return new ResponseEntity<>(response, HttpStatus.CREATED);
 					} else {
 						ErrorMessageResponse response = new ErrorMessageResponse("No slots available");
