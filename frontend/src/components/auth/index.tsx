@@ -22,6 +22,7 @@ const Auth: React.FC = () => {
     const onAuthenticationHandler = async ({ email, password }: { email: string, password: string }) => {
         try {
             const response = await authServices.loginUser(email, password)
+            localStorage.setItem('token', response.data.token)
             dispatch(setAuthUser({ user: response.data.user }))
             swal({
                 title: response.data.message,
