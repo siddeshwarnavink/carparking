@@ -13,22 +13,32 @@ import TextInput from '../ui/textInput'
 import { IBooking } from '../../store/bookingSlice'
 import BookingSlot from '../booking/bookingSlot'
 import useCountdown from '../../hooks/useCountdown'
+import SelectInput from '../ui/selectInput'
 
 const ProcessBooking: React.FC = () => {
     const [isCheckout, setIsCheckout] = useState(false)
     const [booking, setBooking] = useState<IBooking | null>(null)
-    const checkinMutation = useMutation({
-        mutationFn: bookingServices.checkinBooking
+    const [checkoutDone, setCehckoutDone] = useState(false)
+    const processMutation = useMutation({
+        mutationFn: isCheckout ? bookingServices.checkoutBooking : bookingServices.checkinBooking
     })
     const schema = yup.object().shape({
         bookingCode: yup.string().required('Booking code is a required')
     })
-    const autoBackCountdown = useCountdown(3, () => setBooking(null))
+    const autoBackCountdown = useCountdown(3, () => {
+        setBooking(null)
+        setCehckoutDone(false)
+    })
 
     const onProcessBookingHandler = async ({ bookingCode }: { bookingCode: string }) => {
         try {
-            const { booking } = await checkinMutation.mutateAsync(bookingCode)
-            setBooking(booking)
+            const response = await processMutation.mutateAsync(bookingCode)
+            if (!isCheckout) {
+                const checkinResponse = response as bookingServices.BookingCheckinResponse
+                setBooking(checkinResponse.booking)
+            } else {
+                setCehckoutDone(true)
+            }
             autoBackCountdown.startCountdown()
         } catch (error) {
             const axiosError = error as AxiosError<{ errorMessage: string }>
@@ -46,10 +56,10 @@ const ProcessBooking: React.FC = () => {
         }
     }
 
-    if (booking !== null) {
+    if (booking !== null || checkoutDone) {
         return (
             <PageCard
-                caption='Booking checked-in'
+                caption={isCheckout ? 'Booking checked-out' : 'Booking checked-in'}
                 icon={(
                     <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 80 80" fill="none">
                         <path d="M30 33.3333L40.8603 41.4787C42.2553 42.5247 44.2207 42.319 45.369 41.007L66.6667 16.6667" stroke="#33363F" stroke-width="5" stroke-linecap="round" />
@@ -57,7 +67,9 @@ const ProcessBooking: React.FC = () => {
                     </svg>
                 )}
             >
-                <BookingSlot slotName={booking.bookedSlot.spot} location={booking.bookedSlot.location} />
+                {booking ? (
+                    <BookingSlot slotName={booking.bookedSlot.spot} location={booking.bookedSlot.location} />
+                ) : null}
                 <Button fullWidth type='submit' onClick={() => setBooking(null)}>
                     Go back
                 </Button>
@@ -93,7 +105,16 @@ const ProcessBooking: React.FC = () => {
                     return (
                         <form onSubmit={handleSubmit} className={styles.processBooking}>
                             <span className='dimmed'>Scan the QR code or use the code to access process the booking</span>
-
+                            <SelectInput
+                                value={isCheckout ? '1' : '0'}
+                                onChange={(event) => {
+                                    setIsCheckout(event.target.value === '1')
+                                }}
+                                label='Process type:'
+                            >
+                                <option value='0'>Check-in</option>
+                                <option value='1'>Check-out</option>
+                            </SelectInput>
                             <TextInput
                                 label='Enter Code'
                                 name='bookingCode'

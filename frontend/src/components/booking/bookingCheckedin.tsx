@@ -1,9 +1,11 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import swal from 'sweetalert'
+import QRCode from 'react-qr-code'
 
+import styles from './pendingBooking.module.scss'
 import * as bookingServices from '../../services/booking'
-import Button from '../ui/button'
+import Button, { ButtonVarient } from '../ui/button'
 import PageCard from '../ui/pageCard'
 import BookingSlot from './bookingSlot'
 import { State } from '../../store'
@@ -11,6 +13,7 @@ import { useMutation } from '@tanstack/react-query'
 import { clearBooking } from '../../store/bookingSlice'
 
 const BookingCheckedin: React.FC = () => {
+    const [checkout, setCheckout] = useState(false)
     const checkoutMutation = useMutation({
         mutationFn: bookingServices.checkoutBooking
     })
@@ -20,6 +23,7 @@ const BookingCheckedin: React.FC = () => {
     const onCheckoutClickHandler = async () => {
         const isConfirm = await swal({
             title: 'Are you sure?',
+            text: 'Do you want to self-checkout',
             buttons: {
                 confirm: {
                     text: 'Yes',
@@ -62,19 +66,39 @@ const BookingCheckedin: React.FC = () => {
             caption='Your booking is checked-in'
         >
             <div style={{ textAlign: 'center', marginBottom: 16 }}>
-                <span className='dimmed'>Your vehicle is parked on</span>
-                {currentBooking ? (
-                    <BookingSlot
-                        slotName={currentBooking.bookedSlot.spot}
-                        location={currentBooking.bookedSlot.location}
-                    />
-                ) : null}
+                {checkout ? (
+                    <div className={styles.pendingBooking}>
+                        {currentBooking?.bookingCode ? (
+                            <div className={styles.qrCode}>
+                                <QRCode value={currentBooking?.bookingCode} />
+                            </div>
+                        ) : null}
+                        <span className={styles.bookingCode}>{currentBooking?.bookingCode}</span>
+                        <Button
+                            fullWidth
+                            varient={ButtonVarient.Flat}
+                            onClick={onCheckoutClickHandler}
+                        >
+                            Self checkout
+                        </Button>
+                    </div>
+                ) : (
+                    <>
+                        <span className='dimmed'>Your vehicle is parked on</span>
+                        {currentBooking ? (
+                            <BookingSlot
+                                slotName={currentBooking.bookedSlot.spot}
+                                location={currentBooking.bookedSlot.location}
+                            />
+                        ) : null}
+                    </>
+                )}
             </div>
             <Button
                 fullWidth
-                onClick={onCheckoutClickHandler}
+                onClick={() => setCheckout(current => !current)}
             >
-                Checkout
+                {checkout ? 'Back' : 'Checkout'}
             </Button>
         </PageCard>
     )

@@ -46,10 +46,12 @@ export const bookSlot = async (data: BookingFormData) => {
     }
 }
 
+export interface BookingCheckoutResponse {
+    message: string
+}
+
 export const checkoutBooking = async (bookingCode: string) => {
-    interface BookingCheckoutResponse {
-        message: string
-    }
+
     try {
         const response = await axios.patch<BookingCheckoutResponse>('/booking/checkin/checkoutBooking', { bookingCode })
         return response.data
@@ -58,13 +60,13 @@ export const checkoutBooking = async (bookingCode: string) => {
     }
 }
 
-export const checkinBooking = async (bookingCode: string) => {
-    interface BookingCheckoutResponse {
-        message: string
-        booking: IBooking
-    }
+export interface BookingCheckinResponse {
+    message: string
+    booking: IBooking
+}
+export const checkinBooking = async (bookingCode: string) => {  
     try {
-        const response = await axios.patch<BookingCheckoutResponse>('/booking/checkin/checkinBooking', { bookingCode })
+        const response = await axios.patch<BookingCheckinResponse>('/booking/checkin/checkinBooking', { bookingCode })
         return response.data
     } catch (error) {
         throw error

@@ -37,6 +37,7 @@ const SelectInput: React.FC<SelectInputProps> = ({
             <div
                 className={joinClasses(
                     styles.selectInput,
+                    icon ? true : false && styles.withIcon,
                     isInvalid && styles.invalid,
                     size === SelectInputSize.small && styles.sizeSamll
                 )}>

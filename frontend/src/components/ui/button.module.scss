@@ -74,6 +74,17 @@
             width: 100%;
         }
     }
+
+    &.flatButton {
+        background: transparent !important;
+        color: #FF8F00;
+        text-transform: uppercase;
+
+        &:hover {
+            cursor: pointer;
+            background: rgba($color: #FF8F00, $alpha: 0.1) !important;
+        }
+    }
 }
 
 @keyframes bump {

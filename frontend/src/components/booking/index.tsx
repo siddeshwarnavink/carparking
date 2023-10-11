@@ -86,8 +86,8 @@ const Booking: React.FC = () => {
                                 isInvalid={(touched.date && errors.date) ? true : false}
                                 size={SelectInputSize.small}
                             >
-                                <option value={tomorrowsDate}>Tomorrow</option>
                                 <option value={todaysDate}>Today</option>
+                                <option value={tomorrowsDate}>Tomorrow</option>
                             </SelectInput>
                             <VehicleInput
                                 value={values.vehicleType}

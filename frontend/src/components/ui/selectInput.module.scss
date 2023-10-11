@@ -6,6 +6,7 @@
     font-weight: bold;
     line-height: normal;
     margin-bottom: 10px;
+    text-align: left;
 }
 
 .selectInput {
@@ -34,7 +35,7 @@
     }
 
     select {
-        width: 85%;
+        width: 95%;
         outline: none;
         border: 0;
         background-color: transparent;
@@ -46,6 +47,13 @@
             font-style: normal;
             font-weight: 700;
             line-height: normal;
+        }
+    }
+
+
+    &.withIcon {
+        select {
+            width: 85%;
         }
     }
 }

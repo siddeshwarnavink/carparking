@@ -12,6 +12,12 @@ interface ButtonProps {
     disabled?: boolean
     loading?: boolean
     onClick?: () => void
+    varient?: ButtonVarient
+}
+
+export enum ButtonVarient {
+    Default,
+    Flat
 }
 
 const Button: React.FC<ButtonProps> = ({
@@ -21,7 +27,8 @@ const Button: React.FC<ButtonProps> = ({
     icon,
     loading,
     disabled,
-    onClick
+    onClick,
+    varient
 }) => {
     return (
         <button
@@ -30,7 +37,8 @@ const Button: React.FC<ButtonProps> = ({
                 styles.button,
                 loading && styles.loading,
                 (fullWidth || loading) && styles.fullWidth,
-                (icon ? true : false) && styles.withIcon
+                (icon ? true : false) && styles.withIcon,
+                (varient === ButtonVarient.Flat) && styles.flatButton
             )}
             disabled={disabled}
             onClick={onClick}
@@ -52,7 +60,8 @@ Button.defaultProps = {
     fullWidth: false,
     disabled: false,
     loading: false,
-    onClick() {}
+    varient: ButtonVarient.Default,
+    onClick() { }
 }
 
 export default Button
