@@ -10,11 +10,15 @@ import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -44,6 +48,32 @@ public class SlotBookingController {
 	@Autowired
 	private SlotBookingRepository slotBookingRepository;
 
+	@GetMapping(path = "/userBooking")
+	public ResponseEntity<?> getUserBooking() {
+		User user = authService.getAuthenticatedUser();
+		if (user != null) {
+			Pageable pageable = PageRequest.of(0, 1, Sort.by("bookingDate").descending());
+			List<SlotBooking> userBookings = this.slotBookingRepository.findByUserId(user.getId(), pageable);
+
+			if (userBookings.isEmpty()) {
+				BookingSuccessResponse response = new BookingSuccessResponse();
+				response.setMessage("No bookings found");
+				return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+			}
+
+			SlotBooking userBooking = userBookings.get(0);
+
+			BookedSlotDTO bookedSlotDTO = new BookedSlotDTO(userBooking.getSlot().getName(),
+					userBooking.getSlot().getLocation());
+			BookingDTO bookingDTO = new BookingDTO(userBooking.getBookingId(), bookedSlotDTO);
+			BookingSuccessResponse response = new BookingSuccessResponse(bookingDTO);
+
+			return new ResponseEntity<>(response, HttpStatus.OK);
+		} else {
+			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+		}
+	}
+
 	@PostMapping(path = "/checkAvailability")
 	public ResponseEntity<?> checkSlotAvailability(@Valid @RequestBody SlotBookingRequest request) {
 		try {
@@ -71,10 +101,10 @@ public class SlotBookingController {
 	public ResponseEntity<?> bookSlot(@Valid @RequestBody SlotBookingRequest request) {
 		User user = authService.getAuthenticatedUser();
 		if (user != null) {
-			if(user.getRole() != UserRole.Customer) {
+			if (user.getRole() != UserRole.Customer) {
 				return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 			}
-			
+
 			try {
 				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM-dd-yyyy");
 				LocalDate bookingDate = LocalDate.parse(request.getDate(), formatter);

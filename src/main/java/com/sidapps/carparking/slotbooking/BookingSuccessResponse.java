@@ -5,6 +5,9 @@ import com.sidapps.carparking.shared.SuccessMessageResponse;
 public class BookingSuccessResponse extends SuccessMessageResponse {
 	private BookingDTO booking;
 
+	public BookingSuccessResponse() {
+	}
+	
 	public BookingSuccessResponse(BookingDTO booking) {
 		this.setBooking(booking);
 	}

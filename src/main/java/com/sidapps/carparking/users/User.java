@@ -41,6 +41,10 @@ public class User implements UserDetails {
 	@Enumerated(EnumType.STRING)
 	private UserRole role = UserRole.Customer;
 
+	public Integer getId() {
+		return id;
+	}
+
 	public String getName() {
 		return name;
 	}
