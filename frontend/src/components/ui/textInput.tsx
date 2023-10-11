@@ -11,6 +11,7 @@ interface TextInputProps {
     onChange: (event: React.ChangeEvent<HTMLInputElement>) => void
     placeholder?: string
     isInvalid?: boolean
+    label?: string
 }
 
 const TextInput: React.FC<TextInputProps> = ({
@@ -20,22 +21,28 @@ const TextInput: React.FC<TextInputProps> = ({
     value,
     onChange,
     placeholder,
-    isInvalid
+    isInvalid,
+    label
 }) => {
     return (
-        <div className={joinClasses(styles.textInput, isInvalid && styles.invalid)}>
-            {icon ? (
-                <div className={styles.icon}>
-                    {icon}
-                </div>
+        <div className={styles.formControl}>
+            {label ? (
+                <label className={styles.label}>{label}:</label>
             ) : null}
-            <input
-                name={name}
-                type={type}
-                value={value}
-                onChange={onChange}
-                placeholder={placeholder}
-            />
+            <div className={joinClasses(styles.textInput, isInvalid && styles.invalid)}>
+                {icon ? (
+                    <div className={styles.icon}>
+                        {icon}
+                    </div>
+                ) : null}
+                <input
+                    name={name}
+                    type={type}
+                    value={value}
+                    onChange={onChange}
+                    placeholder={placeholder}
+                />
+            </div>
         </div>
     )
 }

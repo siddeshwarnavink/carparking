@@ -1,0 +1,17 @@
+.autoback {
+    text-align: center;
+    margin: 12px 0;
+}
+
+.processBooking {
+    text-align: center;
+
+    .button {
+        margin-top: 16px;
+    }
+
+    :global(.dimmed) {
+        display: block;
+        margin: 16px 0;
+    }
+}

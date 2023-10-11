@@ -44,6 +44,11 @@ public class BookingCheckinController {
 
 			if (booking.isPresent()) {
 				SlotBooking currentBooking = booking.get();
+			
+				if(currentBooking.getCheckinAt() != null) {
+					ErrorMessageResponse response = new ErrorMessageResponse("Booking already checked-in");
+					return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+				}
 
 				currentBooking.setCheckinAt(LocalDateTime.now());
 				currentBooking.setCheckinStaff(user);

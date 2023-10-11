@@ -19,6 +19,7 @@ import Booking from './components/booking'
 import { setCurrentBooking } from './store/bookingSlice'
 import PendingBooking from './components/booking/pendingBooking'
 import BookingCheckedin from './components/booking/bookingCheckedin'
+import ProcessBooking from './components/processBooking'
 
 
 const queryClient = new QueryClient()
@@ -26,6 +27,7 @@ const queryClient = new QueryClient()
 const App: React.FC = () => {
   const dispatch = useDispatch()
   const isAuth = useSelector((state: State) => state.auth.isAuth)
+  const authUser = useSelector((state: State) => state.auth.user)
   const currentBooking = useSelector((state: State) => state.booking.currentBooking)
   useEffect(() => {
     if (localStorage.getItem('token')) {
@@ -57,9 +59,14 @@ const App: React.FC = () => {
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
         <Layout>
-          {isAuth ? (
+          {isAuth ? authUser?.role === 'Customer' ? (
             <Routes>
               <Route path='/' element={currentBooking ? currentBooking.pending ? <PendingBooking /> : <BookingCheckedin /> : <Booking />} />
+              <Route path='*' element={<Navigate to='/' replace />} />
+            </Routes>
+          ) : (
+            <Routes>
+              <Route path='/' element={<ProcessBooking />} />
               <Route path='*' element={<Navigate to='/' replace />} />
             </Routes>
           ) : (

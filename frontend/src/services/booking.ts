@@ -50,3 +50,16 @@ export const checkoutBooking = async (bookingCode: string) => {
         throw error
     }
 }
+
+export const checkinBooking = async (bookingCode: string) => {
+    interface BookingCheckoutResponse {
+        message: string
+        booking: IBooking
+    }
+    try {
+        const response = await axios.patch<BookingCheckoutResponse>('/booking/checkin/checkinBooking', { bookingCode })
+        return response.data
+    } catch (error) {
+        throw error
+    }
+}
