@@ -3,16 +3,13 @@ import { Formik } from 'formik'
 import * as yup from 'yup'
 import swal from 'sweetalert'
 import { AxiosError } from 'axios'
-import { useDispatch } from 'react-redux'
 
 import * as authServices from '../../services/auth'
-import { setAuthUser } from '../../store/authSlice'
 import PageCard from '../ui/pageCard'
 import TextInput from '../ui/textInput'
 import Button from '../ui/button'
 
 const Auth: React.FC = () => {
-    const dispatch = useDispatch()
 
     const schema = yup.object().shape({
         email: yup.string().required('Email is a required'),
@@ -21,9 +18,9 @@ const Auth: React.FC = () => {
 
     const onAuthenticationHandler = async ({ email, password }: { email: string, password: string }) => {
         try {
-            const response = await authServices.loginUser(email, password)
-            localStorage.setItem('token', response.data.token)
-            dispatch(setAuthUser({ user: response.data.user }))
+            const response = await authServices.loginUser(email, password);
+            localStorage.setItem('token', response.data.token);
+            window.location.assign('/')
         } catch (error) {
             const axiosError = error as AxiosError<{ errorMessage: string }>
             if (axiosError.response) {
