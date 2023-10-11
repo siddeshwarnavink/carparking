@@ -14,7 +14,6 @@ export const getUserBooking = async () => {
     }
 }
 
-
 export const checkAvailability = async (data: BookingFormData) => {
     interface CheckAvailabilityResponse {
         message: string
@@ -34,6 +33,18 @@ export const bookSlot = async (data: BookingFormData) => {
     }
     try {
         const response = await axios.post<BookSlotResponse>('/booking/bookSlot', data)
+        return response.data
+    } catch (error) {
+        throw error
+    }
+}
+
+export const checkoutBooking = async (bookingCode: string) => {
+    interface BookingCheckoutResponse {
+        message: string
+    }
+    try {
+        const response = await axios.patch<BookingCheckoutResponse>('/booking/checkin/checkoutBooking', { bookingCode })
         return response.data
     } catch (error) {
         throw error

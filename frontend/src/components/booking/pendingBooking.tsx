@@ -12,7 +12,7 @@ const PendingBooking: React.FC = () => {
     const currentBooking = useSelector((state: State) => state.booking.currentBooking)
     return (
         <PageCard
-            caption='Your booking is pending'
+            caption='Your booking is completed'
         >
             <div className={styles.pendingBooking}>
                 {currentBooking?.bookingCode ? (

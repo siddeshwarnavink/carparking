@@ -20,6 +20,6 @@ public interface SlotBookingRepository extends JpaRepository<SlotBooking, String
 	List<SlotBooking> findByUserAndBookingDateBetween(User user, LocalDateTime startDateTime,
 			LocalDateTime endDateTime);
 	
-	@Query("SELECT sb FROM SlotBooking sb WHERE sb.user.id = :userId AND sb.bookingDate >= :startOfDay")
+	@Query("SELECT sb FROM SlotBooking sb WHERE sb.user.id = :userId AND sb.checkoutAt = NULL AND sb.bookingDate >= :startOfDay")
 	List<SlotBooking> findByUserId(@Param("userId") Integer userId, @Param("startOfDay") LocalDateTime startOfDay, Pageable pageable);
 }

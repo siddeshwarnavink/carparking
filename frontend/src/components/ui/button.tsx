@@ -11,6 +11,7 @@ interface ButtonProps {
     icon?: React.ReactNode
     disabled?: boolean
     loading?: boolean
+    onClick?: () => void
 }
 
 const Button: React.FC<ButtonProps> = ({
@@ -19,7 +20,8 @@ const Button: React.FC<ButtonProps> = ({
     fullWidth,
     icon,
     loading,
-    disabled
+    disabled,
+    onClick
 }) => {
     return (
         <button
@@ -31,6 +33,7 @@ const Button: React.FC<ButtonProps> = ({
                 (icon ? true : false) && styles.withIcon
             )}
             disabled={disabled}
+            onClick={onClick}
         >
             {(icon || loading) ? (
                 <div className={styles.icon}>
@@ -48,7 +51,8 @@ Button.defaultProps = {
     type: 'button',
     fullWidth: false,
     disabled: false,
-    loading: false
+    loading: false,
+    onClick() {}
 }
 
 export default Button

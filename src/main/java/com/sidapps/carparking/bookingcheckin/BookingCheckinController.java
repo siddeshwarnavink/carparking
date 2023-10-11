@@ -67,11 +67,10 @@ public class BookingCheckinController {
 	
 	@PatchMapping(path = "/checkoutBooking")
 	public ResponseEntity<?> checkoutBooking(@Valid @RequestBody BookingCheckinRequest request) {
+		System.out.println("Hit");
 		User user = authService.getAuthenticatedUser();
 		if (user != null) {
-			if (user.getRole() != UserRole.CheckinStaff) {
-				return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-			}
+			System.out.println("User yes");
 
 			Optional<SlotBooking> booking = this.slotBookingRepository.findById(request.getBookingCode());
 
@@ -90,6 +89,8 @@ public class BookingCheckinController {
 			}
 
 		} else {
+
+			System.out.println("User no");
 			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 		}
 	}

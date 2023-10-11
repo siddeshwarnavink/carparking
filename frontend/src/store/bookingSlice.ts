@@ -30,12 +30,21 @@ export const bookingSlice = createSlice({
             updatedState.isFetched = true
             updatedState.currentBooking = action.payload.booking
             return updatedState
+        },
+        clearBooking: state => {
+            let updatedState: BookingState = {
+                ...state
+            }
+            updatedState.isFetched = false
+            updatedState.currentBooking = null
+            return updatedState
         }
     }
 })
 
 export const {
-    setCurrentBooking
+    setCurrentBooking,
+    clearBooking
 } = bookingSlice.actions
 
 export default bookingSlice.reducer

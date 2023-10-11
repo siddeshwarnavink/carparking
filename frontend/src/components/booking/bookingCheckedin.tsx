@@ -1,13 +1,55 @@
 import React from 'react'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+import swal from 'sweetalert'
 
+import * as bookingServices from '../../services/booking'
 import Button from '../ui/button'
 import PageCard from '../ui/pageCard'
 import BookingSlot from './bookingSlot'
 import { State } from '../../store'
+import { useMutation } from '@tanstack/react-query'
+import { clearBooking } from '../../store/bookingSlice'
 
 const BookingCheckedin: React.FC = () => {
+    const checkoutMutation = useMutation({
+        mutationFn: bookingServices.checkoutBooking
+    })
     const currentBooking = useSelector((state: State) => state.booking.currentBooking)
+    const dispatch = useDispatch()
+
+    const onCheckoutClickHandler = async () => {
+        const isConfirm = await swal({
+            title: 'Are you sure?',
+            buttons: {
+                confirm: {
+                    text: 'Yes',
+                    value: true
+                },
+                cancel: {
+                    text: 'Cancel',
+                    visible: true,
+                    value: false
+                }
+            }
+        })
+        if (isConfirm) {
+            try {
+                if (currentBooking) {
+                    await checkoutMutation.mutateAsync(currentBooking.bookingCode)
+                    dispatch(clearBooking())
+                    swal({
+                        icon: 'success',
+                        title: 'Booking Checkout',
+                    })
+                }
+            } catch (error) {
+                swal({
+                    icon: 'error',
+                    title: 'Checkout Failed',
+                })
+            }
+        }
+    }
 
     return (
         <PageCard
@@ -17,7 +59,7 @@ const BookingCheckedin: React.FC = () => {
                     <path d='M70 40C70 46.2683 68.0367 52.379 64.3853 57.4743C60.7343 62.5697 55.5787 66.393 49.6433 68.408C43.7077 70.4227 37.29 70.5277 31.2915 68.7083C25.2931 66.8887 20.0153 63.2357 16.1994 58.263C12.3835 53.29 10.2212 47.2467 10.0161 40.9817C9.81097 34.7167 11.5734 28.5448 15.0559 23.3329C18.5384 18.121 23.566 14.1308 29.4325 11.9228C35.299 9.71481 41.71 9.39987 47.7647 11.0222' stroke='#33363F' stroke-width='5' stroke-linecap='round' />
                 </svg>
             )}
-            caption='Booking checked-in'
+            caption='Your booking is completed'
         >
             <div style={{ textAlign: 'center', marginBottom: 16 }}>
                 <span className='dimmed'>Your vehicle is parked on</span>
@@ -30,6 +72,7 @@ const BookingCheckedin: React.FC = () => {
             </div>
             <Button
                 fullWidth
+                onClick={onCheckoutClickHandler}
             >
                 Checkout
             </Button>

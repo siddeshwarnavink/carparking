@@ -24,10 +24,6 @@ const Auth: React.FC = () => {
             const response = await authServices.loginUser(email, password)
             localStorage.setItem('token', response.data.token)
             dispatch(setAuthUser({ user: response.data.user }))
-            swal({
-                title: response.data.message,
-                icon: 'success',
-            })
         } catch (error) {
             const axiosError = error as AxiosError<{ errorMessage: string }>
             if (axiosError.response) {
@@ -77,7 +73,7 @@ const Auth: React.FC = () => {
                                 onChange={handleChange}
                                 isInvalid={(touched.password && errors.password) ? true : false}
                             />
-                            <div style={{ textAlign: 'center' }}>
+                            <div style={{ display: 'flex', justifyContent: 'center' }}>
                                 <Button type='submit'>Login now</Button>
                             </div>
                         </form>
