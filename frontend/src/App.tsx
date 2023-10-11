@@ -42,14 +42,9 @@ const App: React.FC = () => {
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
         <Layout>
-          <Routes>
-            <Route path='/auth' element={<Auth />} />
-            <Route path='/' element={<Booking />} />
-            <Route path='*' element={<Navigate to='/' replace />} />
-          </Routes>
-          {/* {isAuth ? (
+          {isAuth ? (
             <Routes>
-              <Route path='/' element={<h1>Welcome user</h1>} />
+              <Route path='/' element={<Booking />} />
               <Route path='*' element={<Navigate to='/' replace />} />
             </Routes>
           ) : (
@@ -57,7 +52,7 @@ const App: React.FC = () => {
               <Route path='/' element={<Navigate to='/auth' replace />} />
               <Route path='/auth' element={<Auth />} />
             </Routes>
-          )} */}
+          )}
         </Layout>
       </BrowserRouter>
       <ReactQueryDevtools initialIsOpen={false} />

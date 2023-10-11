@@ -28,12 +28,10 @@ public class WebSecurityConfig {
 
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-		http
-		.cors(cors -> cors.disable())
-		.csrf(csrf -> csrf.disable())
+		http.cors(cors -> cors.configurationSource(corsConfigurationSource())).csrf(csrf -> csrf.disable())
 				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 				.authorizeHttpRequests(authorize -> authorize.requestMatchers("/auth/logout").authenticated()
-						.requestMatchers("/auth/verufy").authenticated().requestMatchers("/auth/**").permitAll()
+						.requestMatchers("/auth/verify").authenticated().requestMatchers("/auth/**").permitAll()
 						.anyRequest().authenticated())
 				.addFilterBefore(new AuthenticationTokenFilter(userSessionRepository),
 						UsernamePasswordAuthenticationFilter.class);
