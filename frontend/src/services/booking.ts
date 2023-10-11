@@ -1,6 +1,8 @@
+import { AxiosError } from 'axios'
 import axios from '../axios-auth'
 import { BookingFormData } from '../components/booking'
 import { IBooking } from '../store/bookingSlice'
+import swal from 'sweetalert'
 
 export const getUserBooking = async () => {
     interface UserBookingResponse {
@@ -35,6 +37,11 @@ export const bookSlot = async (data: BookingFormData) => {
         const response = await axios.post<BookSlotResponse>('/booking/bookSlot', data)
         return response.data
     } catch (error) {
+        const axiosError = error as AxiosError<{ errorMessage: string }>
+        swal({
+            icon: 'error',
+            title: axiosError.response?.data.errorMessage
+        })
         throw error
     }
 }

@@ -63,15 +63,15 @@ const Booking: React.FC = () => {
                     const checkAvailabilityQuery = useQuery({
                         queryKey: ['checkBookingAvailability', JSON.stringify(values)],
                         queryFn: async () => {
-                            const startTime = Date.now();
+                            const startTime = Date.now()
 
-                            const response = await bookingServices.checkAvailability(values);
+                            const response = await bookingServices.checkAvailability(values)
 
-                            const elapsedTime = Date.now() - startTime;
-                            const remainingTime = Math.max(1000 - elapsedTime, 0);
-                            await delay(remainingTime);
+                            const elapsedTime = Date.now() - startTime
+                            const remainingTime = Math.max(1000 - elapsedTime, 0)
+                            await delay(remainingTime)
 
-                            return response;
+                            return response
                         }
                     })
 

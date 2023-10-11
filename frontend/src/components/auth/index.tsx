@@ -18,8 +18,8 @@ const Auth: React.FC = () => {
 
     const onAuthenticationHandler = async ({ email, password }: { email: string, password: string }) => {
         try {
-            const response = await authServices.loginUser(email, password);
-            localStorage.setItem('token', response.data.token);
+            const response = await authServices.loginUser(email, password)
+            localStorage.setItem('token', response.data.token)
             window.location.assign('/')
         } catch (error) {
             const axiosError = error as AxiosError<{ errorMessage: string }>

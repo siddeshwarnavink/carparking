@@ -15,6 +15,7 @@ import BookingSlot from '../booking/bookingSlot'
 import useCountdown from '../../hooks/useCountdown'
 
 const ProcessBooking: React.FC = () => {
+    const [isCheckout, setIsCheckout] = useState(false)
     const [booking, setBooking] = useState<IBooking | null>(null)
     const checkinMutation = useMutation({
         mutationFn: bookingServices.checkinBooking

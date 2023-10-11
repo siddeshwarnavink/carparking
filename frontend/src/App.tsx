@@ -58,7 +58,7 @@ const App: React.FC = () => {
       const [response] = await Promise.all([
         authServices.verifySession(),
         delay(1000)
-      ]);
+      ])
       dispatch(setAuthUser({ user: response.data.user }))
       if (response.data.user.role === 'CheckinStaff') {
         setLoading(false)
