@@ -17,6 +17,15 @@
         margin: 0;
     }
 
+    &.fullWidth {
+        width: 100%;
+
+        .label {
+            width: 100%;
+            text-align: center;
+        }
+    }
+
     &.loading {
         position: relative;
         opacity: 0.7;
@@ -58,10 +67,5 @@
         .label {
             width: 100%;
         }
-    }
-
-    &.fullWidth {
-        width: 100%;
-        text-align: center;
     }
 }

@@ -3,6 +3,7 @@ package com.sidapps.carparking.slotbooking;
 public class BookingDTO {
 	private String bookingCode;
 	private BookedSlotDTO bookedSlot;
+	private boolean pending = true;
 	
 	public BookingDTO(String bookingCode, BookedSlotDTO bookedSlot) {
 		this.setBookedSlot(bookedSlot);
@@ -23,5 +24,13 @@ public class BookingDTO {
 
 	public void setBookedSlot(BookedSlotDTO bookedSlot) {
 		this.bookedSlot = bookedSlot;
+	}
+
+	public boolean isPending() {
+		return pending;
+	}
+
+	public void setPending(boolean pending) {
+		this.pending = pending;
 	}
 }

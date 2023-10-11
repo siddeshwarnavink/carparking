@@ -6,6 +6,7 @@ export interface IBooking {
         location: string
         spot: string
     }
+    pending: boolean
 }
 
 export interface BookingState {

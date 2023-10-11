@@ -52,6 +52,7 @@ public class BookingCheckinController {
 				BookingCheckinResponse response = new BookingCheckinResponse("Booking checked in");
 				BookedSlotDTO bookedSlotDTO = new BookedSlotDTO(currentBooking.getSlot().getLocation(), currentBooking.getSlot().getName());
 				BookingDTO bookingDTO = new BookingDTO(currentBooking.getBookingId(), bookedSlotDTO);
+				bookingDTO.setPending(false);
 				response.setBooking(bookingDTO);
 				return new ResponseEntity<>(response, HttpStatus.OK);
 			} else {

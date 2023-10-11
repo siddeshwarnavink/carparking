@@ -69,6 +69,9 @@ public class SlotBookingController {
 			BookedSlotDTO bookedSlotDTO = new BookedSlotDTO(userBooking.getSlot().getName(),
 					userBooking.getSlot().getLocation());
 			BookingDTO bookingDTO = new BookingDTO(userBooking.getBookingId(), bookedSlotDTO);
+			if(userBooking.getCheckinAt() != null) {
+				bookingDTO.setPending(false);
+			}
 			BookingSuccessResponse response = new BookingSuccessResponse(bookingDTO);
 
 			return new ResponseEntity<>(response, HttpStatus.OK);

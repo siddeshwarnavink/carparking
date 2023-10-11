@@ -18,6 +18,7 @@ import Layout from './components/layout'
 import Booking from './components/booking'
 import { setCurrentBooking } from './store/bookingSlice'
 import PendingBooking from './components/booking/pendingBooking'
+import BookingCheckedin from './components/booking/bookingCheckedin'
 
 
 const queryClient = new QueryClient()
@@ -58,7 +59,7 @@ const App: React.FC = () => {
         <Layout>
           {isAuth ? (
             <Routes>
-              <Route path='/' element={currentBooking ? <PendingBooking /> : <Booking />} />
+              <Route path='/' element={currentBooking ? currentBooking.pending ? <PendingBooking /> : <BookingCheckedin /> : <Booking />} />
               <Route path='*' element={<Navigate to='/' replace />} />
             </Routes>
           ) : (
