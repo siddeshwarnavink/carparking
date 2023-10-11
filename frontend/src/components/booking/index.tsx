@@ -5,6 +5,7 @@ import moment from 'moment'
 import { useMutation, useQuery } from '@tanstack/react-query'
 
 import * as bookingServices from '../../services/booking'
+import { delay } from '../../util'
 import PageCard from '../ui/pageCard'
 import Button from '../ui/button'
 import SelectInput, { SelectInputSize } from '../ui/selectInput'
@@ -61,7 +62,17 @@ const Booking: React.FC = () => {
                 {({ handleSubmit, values, touched, handleChange, errors }) => {
                     const checkAvailabilityQuery = useQuery({
                         queryKey: ['checkBookingAvailability', JSON.stringify(values)],
-                        queryFn: () => bookingServices.checkAvailability(values)
+                        queryFn: async () => {
+                            const startTime = Date.now();
+
+                            const response = await bookingServices.checkAvailability(values);
+
+                            const elapsedTime = Date.now() - startTime;
+                            const remainingTime = Math.max(1000 - elapsedTime, 0);
+                            await delay(remainingTime);
+
+                            return response;
+                        }
                     })
 
                     return (
