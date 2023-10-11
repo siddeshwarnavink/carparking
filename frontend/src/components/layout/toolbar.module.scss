@@ -1,0 +1,84 @@
+.toolbar {
+    display: flex;
+    justify-content: space-between;
+    background-color: rgba($color: white, $alpha: 0.9);
+    padding: 0 20px;
+    align-items: center;
+
+    .navigation {
+        display: flex;
+
+        a.navItem {
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            padding: 5px 10px;
+            cursor: pointer;
+
+            &:hover {
+                cursor: pointer;
+                background-color: #efefef;
+            }
+
+            .icon {
+                margin-right: 5px;
+
+                svg {
+                    width: 40px;
+                    height: 40px;
+                }
+            }
+
+            .label {
+                color: #A9A9A9;
+                font-size: 16px;
+                font-style: normal;
+                font-weight: 700;
+                line-height: normal;
+            }
+
+            &.active {
+                .label {
+                    color: #FF8F00;
+                }
+
+                svg {
+                    path {
+                        fill: #FF8F00;
+                    }
+
+                    circle {
+                        stroke: #FF8F00;
+                    }
+                }
+            }
+        }
+    }
+
+    .userSection {
+        .label {
+            display: flex;
+            align-items: center;
+            padding: 16px 25px;
+            height: 100%;
+
+            &:hover {
+                cursor: pointer;
+                background-color: #efefef;
+            }
+
+            :global(.dimmed) {
+                margin-right: 5px;
+            }
+
+            svg {
+                width: 18px;
+                height: 18px;
+            }
+        }
+    }
+
+    @media (max-width:600px) {
+        display: none;
+    }
+}

@@ -48,6 +48,7 @@ const App: React.FC = () => {
       dispatch(setCurrentBooking({ booking }))
       setLoading(false)
     } catch (error) {
+      setLoading(false)
       dispatch(setCurrentBooking({ booking: null }))
     }
   }
