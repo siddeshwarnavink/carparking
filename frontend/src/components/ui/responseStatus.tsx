@@ -1,13 +1,18 @@
 import React from 'react'
 
 import styles from './responseStatus.module.scss'
+import Spinner from './spinner'
 
 interface ResponseStatusProps {
     message: string
     success?: boolean
+    loading?: boolean
 }
 
-const ResponseStatus: React.FC<ResponseStatusProps> = ({ message, success }) => {
+const ResponseStatus: React.FC<ResponseStatusProps> = ({ message, success, loading }) => {
+    if (loading) {
+        return <Spinner />
+    }
     return (
         <div className={styles.responseStatus}>
             <div className={styles.icon}>
@@ -35,7 +40,8 @@ const ResponseStatus: React.FC<ResponseStatusProps> = ({ message, success }) => 
 }
 
 ResponseStatus.defaultProps = {
-    success: true
+    success: true,
+    loading: false
 }
 
 export default ResponseStatus

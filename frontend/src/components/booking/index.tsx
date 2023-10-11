@@ -2,14 +2,16 @@ import React from 'react'
 import { Formik } from 'formik'
 import * as yup from 'yup'
 import moment from 'moment'
+import { useQuery } from '@tanstack/react-query'
 
+import * as bookingServices from '../../services/booking'
 import PageCard from '../ui/pageCard'
 import Button from '../ui/button'
 import SelectInput, { SelectInputSize } from '../ui/selectInput'
 import VehicleInput from './vehicleInput'
 import ResponseStatus from '../ui/responseStatus'
 
-interface BookingFormData {
+export interface BookingFormData {
     date: string
     vehicleType: 'Car' | 'Bike' | 'Cycle'
 }
@@ -33,8 +35,8 @@ const Booking: React.FC = () => {
 
     }
 
-    const todaysDate = moment().format('MM-DD-YYYY');
-    const tomorrowsDate = moment().add(1, 'days').format('MM-DD-YYYY');
+    const todaysDate = moment().format('MM-DD-YYYY')
+    const tomorrowsDate = moment().add(1, 'days').format('MM-DD-YYYY')
 
     return (
         <PageCard
@@ -47,6 +49,11 @@ const Booking: React.FC = () => {
                 initialValues={{ date: todaysDate, vehicleType: 'Car' } as BookingFormData}
             >
                 {({ handleSubmit, values, touched, handleChange, errors }) => {
+                    const checkAvailabilityQuery = useQuery({
+                        queryKey: ['checkBookingAvailability', JSON.stringify(values)],
+                        queryFn: () => bookingServices.checkAvailability(values)
+                    })
+
                     return (
                         <form onSubmit={handleSubmit}>
                             <SelectInput
@@ -64,9 +71,14 @@ const Booking: React.FC = () => {
                             <VehicleInput
                                 value={values.vehicleType}
                             />
-                            <ResponseStatus message='Slots available' />
+                            <ResponseStatus
+                                message={`${checkAvailabilityQuery.data?.message}`}
+                                loading={checkAvailabilityQuery.isLoading}
+                                success={checkAvailabilityQuery.data?.available}
+                            />
                             <Button
                                 type='submit'
+                                disabled={checkAvailabilityQuery.isLoading || !checkAvailabilityQuery.data?.available}
                                 fullWidth
                                 icon={<img alt='' src='/icons/TicketIcon.svg' />}
                             >

@@ -8,13 +8,15 @@ interface ButtonProps {
     type?: 'button' | 'submit'
     fullWidth?: boolean
     icon?: React.ReactNode
+    disabled?: boolean
 }
 
 const Button: React.FC<ButtonProps> = ({
     children,
     type,
     fullWidth,
-    icon
+    icon,
+    disabled
 }) => {
     return (
         <button
@@ -24,6 +26,7 @@ const Button: React.FC<ButtonProps> = ({
                 fullWidth && styles.fullWidth,
                 (icon ? true : false) && styles.withIcon
             )}
+            disabled={disabled}
         >
             {icon ? (
                 <div className={styles.icon}>{icon}</div>
@@ -37,7 +40,8 @@ const Button: React.FC<ButtonProps> = ({
 
 Button.defaultProps = {
     type: 'button',
-    fullWidth: false
+    fullWidth: false,
+    disabled: false
 }
 
 export default Button

@@ -2,7 +2,7 @@ import React from 'react'
 import { useFormikContext } from 'formik'
 
 import styles from './vehicleInput.module.scss'
-import { joinClasses } from '../../util';
+import { joinClasses } from '../../util'
 
 interface VehicleInputProps {
     value: 'Car' | 'Bike' | 'Cycle'
@@ -11,7 +11,7 @@ interface VehicleInputProps {
 const VehicleInput: React.FC<VehicleInputProps> = ({
     value
 }) => {
-    const formik = useFormikContext();
+    const formik = useFormikContext()
 
     const inputItems = [
         {
@@ -43,7 +43,7 @@ const VehicleInput: React.FC<VehicleInputProps> = ({
                 </svg>
             )
         }
-    ];
+    ]
 
     return (
         <>

@@ -13,6 +13,11 @@
     display: flex;
     align-items: center;
 
+    &:disabled {
+        cursor: not-allowed;
+        background: linear-gradient(0deg, #989898 1.25%, #C7C7C7 100.38%);
+    }
+
     &.withIcon {
         padding: 5px 20px;
 
