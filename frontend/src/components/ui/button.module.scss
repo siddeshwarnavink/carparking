@@ -10,4 +10,29 @@
     font-weight: 600;
     line-height: normal;
     padding: 20px 40px;
+    display: flex;
+    align-items: center;
+
+    &.withIcon {
+        padding: 5px 20px;
+
+        .icon {
+            width: 50px;
+        }
+
+        &.fullWidth {
+            .icon {
+                width: 20px;
+            }
+        }
+
+        .label {
+            width: 100%;
+        }
+    }
+
+    &.fullWidth {
+        width: 100%;
+        text-align: center;
+    }
 }

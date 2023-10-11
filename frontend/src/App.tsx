@@ -14,6 +14,7 @@ import * as authServices from './services/auth'
 import { setAuthUser } from './store/authSlice'
 import Auth from './components/auth'
 import Layout from './components/layout'
+import Booking from './components/booking'
 
 
 const queryClient = new QueryClient()
@@ -41,7 +42,12 @@ const App: React.FC = () => {
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
         <Layout>
-          {isAuth ? (
+          <Routes>
+            <Route path='/auth' element={<Auth />} />
+            <Route path='/' element={<Booking />} />
+            <Route path='*' element={<Navigate to='/' replace />} />
+          </Routes>
+          {/* {isAuth ? (
             <Routes>
               <Route path='/' element={<h1>Welcome user</h1>} />
               <Route path='*' element={<Navigate to='/' replace />} />
@@ -51,7 +57,7 @@ const App: React.FC = () => {
               <Route path='/' element={<Navigate to='/auth' replace />} />
               <Route path='/auth' element={<Auth />} />
             </Routes>
-          )}
+          )} */}
         </Layout>
       </BrowserRouter>
       <ReactQueryDevtools initialIsOpen={false} />

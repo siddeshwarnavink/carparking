@@ -1,4 +1,14 @@
-.textInput {
+.label {
+    display: block;
+    color: #000;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: bold;
+    line-height: normal;
+    margin-bottom: 10px;
+}
+
+.selectInput {
     border-radius: 20px;
     background: #E5E5E5;
     border: 1px solid #E5E5E5;
@@ -7,6 +17,10 @@
     display: flex;
     align-items: center;
     transition: border-color 0.3s ease-in-out;
+
+    &.sizeSamll {
+        padding: 5px 10px;
+    }
 
     &.invalid {
         border-color: red;
@@ -19,7 +33,7 @@
         pointer-events: none;
     }
 
-    input {
+    select {
         width: 85%;
         outline: none;
         border: 0;
