@@ -11,10 +11,13 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 
 import { State } from './store'
 import * as authServices from './services/auth'
+import * as bookingServices from './services/booking'
 import { setAuthUser } from './store/authSlice'
 import Auth from './components/auth'
 import Layout from './components/layout'
 import Booking from './components/booking'
+import { setCurrentBooking } from './store/bookingSlice'
+import PendingBooking from './components/booking/pendingBooking'
 
 
 const queryClient = new QueryClient()
@@ -22,6 +25,7 @@ const queryClient = new QueryClient()
 const App: React.FC = () => {
   const dispatch = useDispatch()
   const isAuth = useSelector((state: State) => state.auth.isAuth)
+  const currentBooking = useSelector((state: State) => state.booking.currentBooking)
   useEffect(() => {
     if (localStorage.getItem('token')) {
       onVerifySessionHandler()
@@ -29,12 +33,22 @@ const App: React.FC = () => {
   }, [])
 
 
+  const handleGetUserBooking = async () => {
+    try {
+      const { booking } = await bookingServices.getUserBooking()
+      dispatch(setCurrentBooking({ booking }))
+    } catch (error) {
+      dispatch(setCurrentBooking({ booking: null }))
+    }
+  }
+
   const onVerifySessionHandler = async () => {
     try {
       const response = await authServices.verifySession()
       dispatch(setAuthUser({ user: response.data.user }))
+      await handleGetUserBooking()
     } catch (error) {
-      // localStorage.removeItem('token')
+      localStorage.removeItem('token')
     }
   }
 
@@ -44,7 +58,7 @@ const App: React.FC = () => {
         <Layout>
           {isAuth ? (
             <Routes>
-              <Route path='/' element={<Booking />} />
+              <Route path='/' element={currentBooking ? <PendingBooking /> : <Booking />} />
               <Route path='*' element={<Navigate to='/' replace />} />
             </Routes>
           ) : (

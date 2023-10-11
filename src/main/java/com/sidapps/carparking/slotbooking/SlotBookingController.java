@@ -52,8 +52,11 @@ public class SlotBookingController {
 	public ResponseEntity<?> getUserBooking() {
 		User user = authService.getAuthenticatedUser();
 		if (user != null) {
+			LocalDate today = LocalDate.now();
+			LocalDateTime startOfDay = today.atStartOfDay();
 			Pageable pageable = PageRequest.of(0, 1, Sort.by("bookingDate").descending());
-			List<SlotBooking> userBookings = this.slotBookingRepository.findByUserId(user.getId(), pageable);
+			List<SlotBooking> userBookings = this.slotBookingRepository.findByUserId(user.getId(), startOfDay,
+					pageable);
 
 			if (userBookings.isEmpty()) {
 				BookingSuccessResponse response = new BookingSuccessResponse();

@@ -1,0 +1,26 @@
+.pendingBooking {
+    text-align: center;
+
+    .qrCode svg {
+        width: 120px;
+        height: 120px;
+    }
+
+    .bookingCode {
+        color: #2F2D3D;
+        font-size: 25px;
+        font-style: normal;
+        font-weight: 700;
+        line-height: normal;
+        letter-spacing: 12px;
+        text-transform: uppercase;
+        display: block;
+        margin: 12px 0;
+    }
+
+    :global(.dimmed) {
+        display: block;
+        text-align: left;
+        margin-bottom: 16px;
+    }
+}

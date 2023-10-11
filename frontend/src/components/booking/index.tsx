@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Formik } from 'formik'
 import * as yup from 'yup'
 import moment from 'moment'
@@ -10,6 +10,8 @@ import Button from '../ui/button'
 import SelectInput, { SelectInputSize } from '../ui/selectInput'
 import VehicleInput from './vehicleInput'
 import ResponseStatus from '../ui/responseStatus'
+import { useDispatch } from 'react-redux'
+import { setCurrentBooking } from '../../store/bookingSlice'
 
 export interface BookingFormData {
     date: string
@@ -17,9 +19,17 @@ export interface BookingFormData {
 }
 
 const Booking: React.FC = () => {
+    const dispatch = useDispatch()
     const bookingMutation = useMutation({
         mutationFn: bookingServices.bookSlot
     })
+    useEffect(() => {
+        if (!bookingMutation.isError && bookingMutation.isSuccess) {
+            dispatch(setCurrentBooking({ booking: bookingMutation.data.booking }))
+        }
+    }, [bookingMutation])
+
+
 
     const schema = yup.object().shape({
         date: yup

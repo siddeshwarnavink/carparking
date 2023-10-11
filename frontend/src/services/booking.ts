@@ -1,5 +1,19 @@
 import axios from '../axios-auth'
 import { BookingFormData } from '../components/booking'
+import { IBooking } from '../store/bookingSlice'
+
+export const getUserBooking = async () => {
+    interface UserBookingResponse {
+        booking: IBooking
+    }
+    try {
+        const response = await axios.get<UserBookingResponse>('/booking/userBooking')
+        return response.data
+    } catch (error) {
+        throw error
+    }
+}
+
 
 export const checkAvailability = async (data: BookingFormData) => {
     interface CheckAvailabilityResponse {
@@ -15,12 +29,11 @@ export const checkAvailability = async (data: BookingFormData) => {
 }
 
 export const bookSlot = async (data: BookingFormData) => {
-    interface CheckAvailabilityResponse {
-        message: string
-        available: boolean
+    interface BookSlotResponse {
+        booking: IBooking
     }
     try {
-        const response = await axios.post<CheckAvailabilityResponse>('/booking/bookSlot', data)
+        const response = await axios.post<BookSlotResponse>('/booking/bookSlot', data)
         return response.data
     } catch (error) {
         throw error

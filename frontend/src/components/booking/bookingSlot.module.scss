@@ -1,0 +1,22 @@
+.bookingSlot {
+    display: flex;
+    justify-content: center;
+    margin: 12px 0;
+
+    .item {
+        display: flex;
+        align-items: center;
+
+        .icon {
+            margin-right: 10px;
+        }
+
+        .value {
+            color: #2F2D3D;
+            font-size: 18px;
+            font-style: normal;
+            font-weight: 700;
+            line-height: normal;
+        }
+    }
+}
