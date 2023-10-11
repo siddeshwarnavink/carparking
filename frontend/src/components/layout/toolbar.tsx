@@ -1,9 +1,14 @@
 import { NavLink } from 'react-router-dom'
+import { Menu } from '@headlessui/react'
+import { useSelector } from 'react-redux'
 
 import styles from './toolbar.module.scss'
+import { State } from '../../store'
 import { joinClasses } from '../../util'
 
 const Toolbar: React.FC = () => {
+    const authUser = useSelector((state: State) => state.auth.user)
+
     const navigations = [
         {
             path: '/',
@@ -57,14 +62,26 @@ const Toolbar: React.FC = () => {
                     )
                 })}
             </div>
-            <div className={styles.userSection}>
-                <div className={styles.label}>
-                    <div className='dimmed'> Hi, Sid</div>
+            <Menu as='div' className={styles.userSection}>
+                <Menu.Button as='div' className={styles.label}>
+                    <div className='dimmed'> Hi, {authUser?.name}</div>
                     <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
                         <path d="M22.12 11.06L16 17.1667L9.88 11.06L8 12.94L16 20.94L24 12.94L22.12 11.06Z" fill="#A9A9A9" />
                     </svg>
-                </div>
-            </div>
+                </Menu.Button>
+                <Menu.Items className={styles.profileMenu}>
+                    <Menu.Item
+                        as='button'
+                        className={styles.item}
+                        onClick={() => {
+                            localStorage.removeItem('token')
+                            window.location.assign('/')
+                        }}
+                    >
+                        Logout
+                    </Menu.Item>
+                </Menu.Items>
+            </Menu>
         </div>
     )
 }
