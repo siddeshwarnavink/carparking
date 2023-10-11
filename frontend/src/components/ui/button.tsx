@@ -2,6 +2,7 @@ import React from 'react'
 
 import styles from './button.module.scss'
 import { joinClasses } from '../../util'
+import Spinner from './spinner'
 
 interface ButtonProps {
     children: React.ReactNode
@@ -9,6 +10,7 @@ interface ButtonProps {
     fullWidth?: boolean
     icon?: React.ReactNode
     disabled?: boolean
+    loading?: boolean
 }
 
 const Button: React.FC<ButtonProps> = ({
@@ -16,6 +18,7 @@ const Button: React.FC<ButtonProps> = ({
     type,
     fullWidth,
     icon,
+    loading,
     disabled
 }) => {
     return (
@@ -23,16 +26,19 @@ const Button: React.FC<ButtonProps> = ({
             type={type}
             className={joinClasses(
                 styles.button,
-                fullWidth && styles.fullWidth,
+                loading && styles.loading,
+                (fullWidth || loading) && styles.fullWidth,
                 (icon ? true : false) && styles.withIcon
             )}
             disabled={disabled}
         >
-            {icon ? (
-                <div className={styles.icon}>{icon}</div>
+            {(icon || loading) ? (
+                <div className={styles.icon}>
+                    {loading ? <Spinner /> : icon}
+                </div>
             ) : null}
             <div className={styles.label}>
-                {children}
+                {loading ? 'Loading...' : children}
             </div>
         </button>
     )
@@ -41,7 +47,8 @@ const Button: React.FC<ButtonProps> = ({
 Button.defaultProps = {
     type: 'button',
     fullWidth: false,
-    disabled: false
+    disabled: false,
+    loading: false
 }
 
 export default Button

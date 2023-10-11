@@ -2,7 +2,7 @@ import React from 'react'
 import { Formik } from 'formik'
 import * as yup from 'yup'
 import moment from 'moment'
-import { useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 
 import * as bookingServices from '../../services/booking'
 import PageCard from '../ui/pageCard'
@@ -17,6 +17,10 @@ export interface BookingFormData {
 }
 
 const Booking: React.FC = () => {
+    const bookingMutation = useMutation({
+        mutationFn: bookingServices.bookSlot
+    })
+
     const schema = yup.object().shape({
         date: yup
             .string()
@@ -31,10 +35,6 @@ const Booking: React.FC = () => {
             .oneOf(['Car', 'Bike', 'Cycle'], 'Invalid vehicle type')
     })
 
-    const onBookingHandler = () => {
-
-    }
-
     const todaysDate = moment().format('MM-DD-YYYY')
     const tomorrowsDate = moment().add(1, 'days').format('MM-DD-YYYY')
 
@@ -45,7 +45,7 @@ const Booking: React.FC = () => {
         >
             <Formik
                 validationSchema={schema}
-                onSubmit={onBookingHandler}
+                onSubmit={bookingMutation.mutate}
                 initialValues={{ date: todaysDate, vehicleType: 'Car' } as BookingFormData}
             >
                 {({ handleSubmit, values, touched, handleChange, errors }) => {
@@ -78,6 +78,7 @@ const Booking: React.FC = () => {
                             />
                             <Button
                                 type='submit'
+                                loading={bookingMutation.isLoading}
                                 disabled={checkAvailabilityQuery.isLoading || !checkAvailabilityQuery.data?.available}
                                 fullWidth
                                 icon={<img alt='' src='/icons/TicketIcon.svg' />}
