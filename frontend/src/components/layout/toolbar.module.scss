@@ -57,6 +57,12 @@
 
     .userSection {
         position: relative;
+        display: flex;
+        align-items: center;
+
+        .helpLink {
+            margin-top: 5npx;
+        }
 
         .label {
             display: flex;

@@ -63,9 +63,16 @@ const Toolbar: React.FC = () => {
                 })}
             </div>
             <Menu as='div' className={styles.userSection}>
+                <a href='http://localhost/wordpress/?p=142' target='_blank' className={styles.helpLink}>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40" fill="none">
+                        <path d="M20 36.6667C29.2047 36.6667 36.6666 29.2048 36.6666 20C36.6666 10.7953 29.2047 3.33334 20 3.33334C10.7952 3.33334 3.33331 10.7953 3.33331 20C3.33331 29.2048 10.7952 36.6667 20 36.6667Z" stroke="#A9A9A9" stroke-width="2" />
+                        <path d="M16.875 14.7917C16.875 13.0658 18.2742 11.6667 20 11.6667C21.7258 11.6667 23.125 13.0658 23.125 14.7917C23.125 15.9374 22.5083 16.9392 21.589 17.4832C20.7967 17.9518 20 18.6628 20 19.5833V21.6667" stroke="#A9A9A9" stroke-width="2" stroke-linecap="round" />
+                        <path d="M20 28.3333C20.9205 28.3333 21.6666 27.5871 21.6666 26.6667C21.6666 25.7462 20.9205 25 20 25C19.0795 25 18.3333 25.7462 18.3333 26.6667C18.3333 27.5871 19.0795 28.3333 20 28.3333Z" fill="#A9A9A9" />
+                    </svg>
+                </a>
                 <Menu.Button as='div' className={styles.label}>
                     <div className='dimmed'> Hi, {authUser?.name}</div>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 32 32" fill="none">
                         <path d="M22.12 11.06L16 17.1667L9.88 11.06L8 12.94L16 20.94L24 12.94L22.12 11.06Z" fill="#A9A9A9" />
                     </svg>
                 </Menu.Button>
